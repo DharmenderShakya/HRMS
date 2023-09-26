@@ -1,26 +1,35 @@
-package com.example.demo.configration;
+package com.example.demo.Service;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-import com.example.demo.entity.RegisterUser;
+import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.User;
+import com.example.demo.entity.UserRole;
+import com.example.demo.model.Authority;
 
-public class LoginDetails implements UserDetails{
+public class UserDetailService implements UserDetails {
+
+	private User user;
 	
-	private RegisterUser user;
+	private UserRole userRole;
 	
-	public LoginDetails(RegisterUser user) {
+	
+	public UserDetailService(User user) {
 		this.user = user;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Authority> set=new HashSet<>();
+		user.getUserRole().forEach(userRole->{
+			set.add(new Authority(userRole.getRole().getRole()));
+		});
+		return set;
 	}
 
 	@Override
@@ -32,7 +41,7 @@ public class LoginDetails implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return user.getName();
+		return user.getUserName();
 	}
 
 	@Override
@@ -58,12 +67,5 @@ public class LoginDetails implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
-
-	public LoginDetails() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	
 
 }

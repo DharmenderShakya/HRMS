@@ -16,13 +16,17 @@ import com.example.demo.Repository.EmployeeRepository;
 import com.example.demo.Repository.ProjectRepository;
 import com.example.demo.Repository.QuelificationRepository;
 import com.example.demo.Repository.SalaryRepo;
+import com.example.demo.Repository.UserRepository;
 import com.example.demo.Repository.LeaveManagementRepository;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Employee;
 import com.example.demo.entity.LeaveManagement;
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Quelification;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.Salary;
+import com.example.demo.entity.User;
+import com.example.demo.entity.UserRole;
 
 @Service
 public class EmloyeeService {
@@ -31,7 +35,7 @@ public class EmloyeeService {
 	private ProjectRepository projectRepository;
 	
 	@Autowired
-	private EmployeeRepository userRepository; 
+	private EmployeeRepository employeeRepository; 
 	
 	@Autowired
 	private LeaveManagementRepository leaveRepo;
@@ -45,43 +49,55 @@ public class EmloyeeService {
 	@Autowired
 	private SalaryRepo salaryRepo;
 	
+	@Autowired
+	private UserService userService;
+	
 	public Employee saveEmployee(Employee employee) {
 		Employee addreeQuelification=new Employee();
 		addreeQuelification.setAddress(employee.getAddress());
 		addreeQuelification.setQuelification(employee.getQuelification());
-		return  userRepository.save(employee);
+		User user=new User();
+		user.setFirstName(employee.getFirstName());
+		user.setLastName(employee.getLastName());
+		user.setEmail(employee.getEmail());
+		user.setUserName(employee.getFirstName()+"1234");
+		user.setPhone(employee.getPhone_no());
+		user.setProfile(employee.getProfile());
+		user.setPassword(employee.getPassword());
+		userService.addUser(user);
+		return  employeeRepository.save(employee);
 	}
 	
 	public Page<Employee> getEmployee( Pageable pageable){
-		return userRepository.findAll(pageable);
+		return employeeRepository.findAll(pageable);
 	}
 	
 	public List<Employee> getEmployee(){
 		
-		return userRepository.findAll();
+		return employeeRepository.findAll();
 	}
 	
 	
 	public Optional<Employee> getByEmployeeId(int empId) {
 		
-		return userRepository.findById(empId);
+		return employeeRepository.findById(empId);
 	}
 	
 	public Employee saveOrUpdate(int empId,Employee employee) {
 		
-		Employee emp=userRepository.findById(empId).get();
+		Employee emp=employeeRepository.findById(empId).get();
 		emp.setEmail(employee.getEmail());
 		emp.setFirstName(employee.getFirstName());
 		emp.setLastName(employee.getLastName());
 		emp.setPhone_no(employee.getPhone_no());
-		 return userRepository.save(emp);
+		 return employeeRepository.save(emp);
 	}
 	
 	
 		
 		public void assignEmployeeProject(int empId,int projectId) {
 				
-		Employee user=userRepository.findById(empId).get();
+		Employee user=employeeRepository.findById(empId).get();
 		Project role=projectRepository.findById(projectId).get();
 		role.getUser().add(user);
 		user.getRoles().add(role);
@@ -91,11 +107,11 @@ public class EmloyeeService {
 		}
 		
 		public void deleteEmployee(int id) {
-			userRepository.deleteById(id);
+			employeeRepository.deleteById(id);
 		}
 		
 		public Address address(int empId,Address address) {
-			Employee user=userRepository.findById(empId).get();
+			Employee user=employeeRepository.findById(empId).get();
 			user.setAddress(address);
 			return addressRepo.save(address);
 			
@@ -106,9 +122,10 @@ public class EmloyeeService {
 //			return leaveRepo.save(leave);
 //		}
 		public Quelification addQuelification (int empId,Quelification quelification) {
-			Employee user=userRepository.findById(empId).get();
+			Employee user=employeeRepository.findById(empId).get();
 			user.setQuelification(quelification);
 			return quelificationRepo.save(quelification);
 		
 		}
+		
 }

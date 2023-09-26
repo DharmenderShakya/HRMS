@@ -20,7 +20,9 @@ import com.example.demo.entity.Address;
 import com.example.demo.entity.Employee;
 import com.example.demo.entity.LeaveManagement;
 import com.example.demo.entity.Quelification;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.Salary;
+import com.example.demo.entity.UserRole;
 
 @RestController
 @RequestMapping("/hrms")

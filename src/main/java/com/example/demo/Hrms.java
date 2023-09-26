@@ -13,8 +13,6 @@ public class Hrms {
 	public static void main(String[] args) {
 		SpringApplication.run(Hrms.class, args);
 		
-		Hrms fghjk=new Hrms();
-		
 	}
 
 }

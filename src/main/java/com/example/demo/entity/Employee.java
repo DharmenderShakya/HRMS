@@ -1,8 +1,9 @@
 package com.example.demo.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -21,8 +23,8 @@ import jakarta.persistence.OneToOne;
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-
-private int  id;
+	private int  id;
+	private String empId="EMP00"+id;
 	@Column(name="Employee_FirstName")
 private String firstName;
 	@Column(name="Employee_lastName")
@@ -33,6 +35,10 @@ private String email;
 //private String address;
 	@Column(name="Phone_NO")
 	private String phone_no;
+	private String password;
+	private String profile;
+//	@OneToOne(fetch = FetchType.EAGER)
+//	private User user;
 @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 @JoinTable(
         name = "Employee_Project",
@@ -85,12 +91,6 @@ public Set<Project> getRoles() {
 public void setRoles(Set<Project> roles) {
 	this.roles = roles;
 }
-//public String getAddress() {
-//	return address;
-//}
-//public void setAddress(String address) {
-//	this.address = address;
-//}
 public String getPhone_no() {
 	return phone_no;
 }
@@ -114,12 +114,7 @@ public Employee() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-//public Salary getSalary() {
-//	return salary;
-//}
-//public void setSalary(Salary salary) {
-//	this.salary = salary;
-//}
+
 public Address getAddress() {
 	return address;
 }
@@ -132,14 +127,24 @@ public Quelification getQuelification() {
 public void setQuelification(Quelification quelification) {
 	this.quelification = quelification;
 }
-
-//public LeaveManagement getLeaveManagment() {
-//	return leaveManagment;
-//}
-//public void setLeaveManagment(LeaveManagement leaveManagment) {
-//	this.leaveManagment = leaveManagment;
-//}
-
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
+}
+public String getProfile() {
+	return profile;
+}
+public void setProfile(String profile) {
+	this.profile = profile;
+}
+public String getEmpId() {
+	return empId;
+}
+public void setEmpId(String empId) {
+	this.empId = empId;
+}
 
 
 }

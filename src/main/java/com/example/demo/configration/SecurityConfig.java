@@ -15,23 +15,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.example.demo.Service.UserDetailServiceImplementation;
 
-//import com.employee.filter.jwtAuthFilter;
-@Configuration
 @EnableWebSecurity
+@Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
-//	@Autowired
-//	private jwtAuthFilter authFilter;
-	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+	@Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean
+	public PasswordEncoder passwordEncoder() {
 		System.out.println("this is password encoder");
 		return new BCryptPasswordEncoder();
 	}
@@ -40,32 +40,35 @@ public class SecurityConfig {
 	public UserDetailsService userDetailsService() {
 
 		System.out.println("this is user service file");
-	return	new LoginDetailService();
+	return	new UserDetailServiceImplementation();
 	}
-	
-	
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-		System.out.println("this is config file");
-		httpSecurity.
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    	
+    	httpSecurity.
 		csrf().
 		disable().
 		authorizeHttpRequests().
-		requestMatchers("/auth/authenticate").permitAll().
+		requestMatchers("auth/generate-token","/user/").permitAll().
 		requestMatchers(HttpMethod.GET).permitAll().
 		requestMatchers(HttpMethod.POST).permitAll().
 		requestMatchers(HttpMethod.DELETE).permitAll().
 		requestMatchers(HttpMethod.PUT).permitAll().
 		anyRequest().
-		authenticated().
-		and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		authenticated().and()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
+		.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+		.and()
+		.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 		.authenticationProvider(authenticationProvider());
 		System.out.println("after----------------------------");
 		return httpSecurity.build();
-	}
 	
-	@Bean
+    
+    }
+    
+    @Bean
 	public AuthenticationProvider authenticationProvider() {
 		System.out.println("this is doa authentication file");
 		DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
@@ -79,5 +82,5 @@ public class SecurityConfig {
 		return configuration.getAuthenticationManager();
 	}
 
-
+    
 }
