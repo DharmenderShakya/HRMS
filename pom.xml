@@ -77,10 +77,8 @@
     <artifactId>spring-boot-test</artifactId>
     <scope>test</scope>
 </dependency>
-    
 	</dependencies>
-
-	<!--<build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -88,21 +86,5 @@
 			</plugin>
         
 		</plugins>
-	</build> -->
-	
-	<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.10.1</version> <!-- Use the appropriate version -->
-            <configuration>
-                <source>17</source>
-                <target>17</target>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-
-
+	</build>
 </project>

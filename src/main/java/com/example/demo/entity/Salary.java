@@ -18,7 +18,7 @@ public class Salary {
 	private String employeeName;
 	private int month;
 	
-	@OneToOne(cascade = CascadeType.ALL.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="EmployeeId",referencedColumnName = "id")
 	private Employee employee;
 	
