@@ -39,6 +39,7 @@ WORKDIR /app
 COPY --from=build /app/target/hrms.jar /app/hrms.jar
 
 # Expose the port your application runs on
+ENV PORT 8080
 EXPOSE 8080
 
 # Run the JAR file
