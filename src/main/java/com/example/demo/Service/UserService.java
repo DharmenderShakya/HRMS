@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Repository.UserRepository;
@@ -20,15 +18,12 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	@Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
 	private UserRoleRepository userRoleRepository ;
 	
 	public User addUser(User user) {
-		
-		user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setPassword(user.getPassword());
 		Set<UserRole> userRoleSet=new HashSet<>();
 		Role role=new Role();
 		role.setRole("NORMAL");
